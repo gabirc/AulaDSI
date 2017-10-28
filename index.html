@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="app" lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>Alunos DSI</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+</head>
+    <body ng-controller="controller as ctrl">
+        <div class="jumbotron">
+            <H1 class="display-3"><center> {{ctrl.titulo}} </center></H1>
+        </div>
+
+
+        <H2>Número de alunos da aula de DSI: {{ctrl.people.length}}</H2>
+
+
+        <input ng-model="ctrl.astronauta"> <button ng-click="ctrl.add()" class="btn btn-sm btn-primary">Add</button>
+        <ul class="list-group"> <li class="list-group-item" ng-repeat="astronauta in ctrl.people"> {{astronauta.name}}
+            <button ng-click = "ctrl.remove(astronauta)" class="btn btn-sm btn-danger">X</button></li></ul>
+
+        <script src="js/angular.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+
+        <script type="text/javascript">
+            angular.module('app',[])
+            .controller('controller',['$http', function($http){
+                var ctrl= this;
+                ctrl.titulo= "Alunos DSI";
+
+                $http({method:'GET', url:"http://localhost:5000/alunos"
+                }) .then(function (resp){
+                    ctrl.numero= resp.data.number;
+                    ctrl.people= resp.data.people;
+                })
+                ctrl.add = function(){
+                   ctrl.people.push({name:ctrl.astronauta})
+                }
+                ctrl.remove = function(astronauta){
+                   ctrl.people.splice(ctrl.people.indexOf(astronauta), 1)
+                }
+            }
+            ])
+        </script>
+    </body>
+</html>
